@@ -1,0 +1,10 @@
+
+packages:
+  - '.'
+
+allowBuilds:
+  "@prisma/client": true
+  prisma: true
+  "@prisma/engines": true
+  sharp: true
+  unrs-resolver: tru
