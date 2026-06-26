@@ -43,24 +43,56 @@ export function useAdminOrders() {
         onSuccess: () => toast.success('Статус заказа обновлён'),
     });
 
-    const deleteOrder = useMutation({
+    // ==================== УЛУЧШЕННОЕ УДАЛЕНИЕ ====================
+    const deleteMutation = useMutation({
         mutationFn: async (id: string) => {
-            const res = await fetch(`/api/admin/orders/${id}`, { method: 'DELETE' });
-            if (!res.ok) throw new Error('Не удалось удалить заказ');
-            return res.json();
+            const res = await fetch(`/api/admin/orders/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Не удалось удалить заказ');
+            }
+
+            return id; // возвращаем id, чтобы использовать в onSuccess/onMutate
         },
+
+        // ← Оптимистичное удаление
+        onMutate: async (id: string) => {
+            await queryClient.cancelQueries({ queryKey: ['adminOrders'] });
+
+            const previousOrders = queryClient.getQueryData<AdminOrder[]>(['adminOrders']);
+
+            // Сразу убираем заказ из списка
+            queryClient.setQueryData<AdminOrder[]>(['adminOrders'], (old = []) =>
+                old.filter(order => order.id !== id)
+            );
+
+            return { previousOrders };
+        },
+
+        onError: (err, id, context) => {
+            console.error('Delete error:', err);
+            // Восстанавливаем список при ошибке
+            if (context?.previousOrders) {
+                queryClient.setQueryData(['adminOrders'], context.previousOrders);
+            }
+            toast.error(err.message || 'Не удалось удалить заказ');
+        },
+
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['adminOrders'] });
             toast.success('Заказ успешно удалён');
+            queryClient.invalidateQueries({ queryKey: ['adminOrders'] });
         },
-        onError: () => toast.error('Не удалось удалить заказ'),
     });
 
     return {
         orders,
         isLoading,
-        deleteOrder:deleteOrder.mutate,
+        deleteOrder: deleteMutation.mutateAsync,
         updateOrderStatus: updateStatusMutation.mutate,
         isUpdating: updateStatusMutation.isPending,
+        isDeleting: deleteMutation.isPending,
     };
 }

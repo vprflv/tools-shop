@@ -1,12 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 
 export default function ContactsPage() {
     return (
-        <div className="min-h-screen bg-zinc-950 text-white pb-20">
+        <div className="min-h-screen bg-[#2e2e30] text-white pb-20">
             <div className="max-w-4xl mx-auto px-5 sm:px-6 py-10 md:py-16">
-                <Link href="/" className="text-yellow-400 hover:text-yellow-300 mb-8 inline-flex items-center gap-2 text-sm">
+
+                <Link
+                    href="/"
+                    className="text-[#d25e2d] hover:text-white mb-8 inline-flex items-center gap-2 text-sm font-medium transition-colors"
+                >
                     ← На главную
                 </Link>
 
@@ -14,73 +19,97 @@ export default function ContactsPage() {
 
                 <div className="grid md:grid-cols-2 gap-10 md:gap-16">
 
-                    {/* Левая колонка - Контакты */}
+                    {/* Левая колонка — Основные контакты */}
                     <div className="space-y-10">
                         <div>
                             <h2 className="text-2xl font-semibold mb-6">Связаться с нами</h2>
 
-                            {/* Блок консультации */}
-                            <div className="bg-zinc-900 border border-yellow-400/30 rounded-3xl p-7 md:p-9">
-                                <p className="text-yellow-400 text-sm uppercase tracking-widest mb-2">Консультация и помощь в выборе</p>
-                                <p className="text-3xl md:text-4xl font-semibold text-white hover:text-yellow-400 transition">
-                                    8 (913) 519-79-27
-                                </p>
-                                <p className="text-zinc-400 mt-4">
-                                    Звонки принимаем ежедневно с 9:00 до 21:00
-                                </p>
+                            {/* Главный телефон */}
+                            <div className="bg-[#252527] border border-[#3a3a3d] rounded-3xl p-7 md:p-9 mb-8">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-[#d25e2d]/10 rounded-2xl flex items-center justify-center">
+                                        <Phone className="w-6 h-6 text-[#d25e2d]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm uppercase tracking-widest text-zinc-500">Телефон</p>
+                                        <p className="text-xl md:text-xl font-semibold text-white mt-1">
+                                            8 (913) 519-79-27
+                                        </p>
+                                        <p className="text-zinc-400 mt-2">Ежедневно с 9:00 до 21:00</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div>
-                            <h3 className="text-xl font-semibold mb-4">Адрес магазина</h3>
+                            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                <MapPin className="w-5 h-5 text-[#d25e2d]" />
+                                Адрес магазина
+                            </h3>
                             <p className="text-lg text-zinc-300">
                                 г. Красноярск,<br />
-                                ул. Лесопильщиков, 163<br />
-                                (в помещении магазина «Автомасла»)
+                                ул. Партизанская, 42<br />
+                                (ТЦ «ИнструментМир», 2 этаж)
                             </p>
                         </div>
 
                         <div>
-                            <h3 className="text-xl font-semibold mb-4">Режим работы</h3>
+                            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                <Clock className="w-5 h-5 text-[#d25e2d]" />
+                                Режим работы
+                            </h3>
                             <p className="text-zinc-300">
-                                Пн — Вс: с 10:00 до 20:00
+                                Понедельник — Воскресенье:<br />
+                                10:00 — 20:00
                             </p>
                         </div>
 
                         <div>
-                            <h3 className="text-xl font-semibold mb-4">Email</h3>
-                            <p className="text-yellow-400 hover:text-yellow-300 transition">
-                                info@osa.store
-                            </p>
+                            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                <Mail className="w-5 h-5 text-[#d25e2d]" />
+                                Email
+                            </h3>
+                            <a
+                                href="mailto:info@instryment.ru"
+                                className="text-[#d25e2d] hover:text-[#ff8a5c] transition-colors text-lg"
+                            >
+                                info@instryment.ru
+                            </a>
                         </div>
                     </div>
 
-                    {/* Правая колонка - Дополнительно */}
+                    {/* Правая колонка — Дополнительно */}
                     <div className="space-y-10">
                         <div>
-                            <h2 className="text-2xl font-semibold mb-6">Как с нами связаться</h2>
-                            <div className="space-y-6">
-                                <div className="flex gap-4">
-                                    <div className="w-10 h-10 rounded-2xl bg-zinc-900 flex items-center justify-center text-xl">📞</div>
+                            <h2 className="text-xl font-semibold mb-6">Как с нами связаться</h2>
+                            <div className="space-y-8">
+                                <div className="flex gap-5">
+                                    <div className="w-11 h-11 rounded-2xl bg-[#252527] flex items-center justify-center flex-shrink-0">
+                                        📞
+                                    </div>
                                     <div>
-                                        <p className="font-medium">Телефон</p>
-                                        <p className="text-yellow-400">8 (913) 519-79-27</p>
+                                        <p className="font-medium">Телефон для консультаций</p>
+                                        <p className=" text-[#d25e2d]">8 (913) 519-79-27</p>
                                     </div>
                                 </div>
 
-                                <div className="flex gap-4">
-                                    <div className="w-10 h-10 rounded-2xl bg-zinc-900 flex items-center justify-center text-xl">✉️</div>
+                                <div className="flex gap-5">
+                                    <div className="w-11 h-11 rounded-2xl bg-[#252527] flex items-center justify-center flex-shrink-0">
+                                        ✉️
+                                    </div>
                                     <div>
-                                        <p className="font-medium">Email</p>
-                                        <p className="text-yellow-400">info@osa.store</p>
+                                        <p className="font-medium">Электронная почта</p>
+                                        <p className="text-[#d25e2d]">info@instryment.ru</p>
                                     </div>
                                 </div>
 
-                                <div className="flex gap-4">
-                                    <div className="w-10 h-10 rounded-2xl bg-zinc-900 flex items-center justify-center text-xl">📍</div>
+                                <div className="flex gap-5">
+                                    <div className="w-11 h-11 rounded-2xl bg-[#252527] flex items-center justify-center flex-shrink-0">
+                                        📍
+                                    </div>
                                     <div>
-                                        <p className="font-medium">Адрес</p>
-                                        <p className="text-zinc-400">Красноярск, ул. Лесопильщиков, 163</p>
+                                        <p className="font-medium">Физический адрес</p>
+                                        <p className="text-zinc-400">Красноярск, ул. Партизанская, 42</p>
                                     </div>
                                 </div>
                             </div>

@@ -3,15 +3,13 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import {getProductImage} from "@/lib/utils/product-image-store";
-
+import { getProductImage } from "@/lib/utils/product-image-store";
 
 export default function ProductImage({ product }: { product: any }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
 
     const imagesCount = product.imagePaths?.length || product.images?.length || 0;
-
     const currentImage = getProductImage(product, currentIndex);
 
     const discount = product.oldPrice
@@ -25,7 +23,7 @@ export default function ProductImage({ product }: { product: any }) {
         <div className="space-y-6">
             {/* Основное фото */}
             <div
-                className="relative aspect-square bg-zinc-950 rounded-3xl overflow-hidden group cursor-zoom-in"
+                className="relative aspect-square bg-[#1c1c1e] rounded-3xl overflow-hidden group cursor-zoom-in border border-[#3a3a3d]"
                 onClick={() => setIsZoomed(true)}
             >
                 <Image
@@ -48,16 +46,20 @@ export default function ProductImage({ product }: { product: any }) {
 
                 {imagesCount > 1 && (
                     <>
+                        {/* Стрелка влево */}
                         <button
                             onClick={(e) => { e.stopPropagation(); goToPrev(); }}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white p-4 rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#d25e2d]
+                                       text-white p-4 rounded-full opacity-0 group-hover:opacity-100 transition-all"
                         >
                             <ChevronLeft className="w-6 h-6" />
                         </button>
 
+                        {/* Стрелка вправо */}
                         <button
                             onClick={(e) => { e.stopPropagation(); goToNext(); }}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white p-4 rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#d25e2d]
+                                       text-white p-4 rounded-full opacity-0 group-hover:opacity-100 transition-all"
                         >
                             <ChevronRight className="w-6 h-6" />
                         </button>
@@ -67,7 +69,7 @@ export default function ProductImage({ product }: { product: any }) {
 
             {/* Миниатюры */}
             {imagesCount > 1 && (
-                <div className="flex gap-3 overflow-x-auto pb-4 pl-5 pt-5 snap-x snap-mandatory scrollbar-hide">
+                <div className="flex gap-3 overflow-x-auto pb-4 pl-1 pt-2 snap-x snap-mandatory scrollbar-hide">
                     {Array.from({ length: imagesCount }).map((_, index) => {
                         const thumbSrc = getProductImage(product, index);
                         const isActive = index === currentIndex;
@@ -78,8 +80,8 @@ export default function ProductImage({ product }: { product: any }) {
                                 onClick={() => setCurrentIndex(index)}
                                 className={`relative flex-shrink-0 w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-300 snap-start
                                     ${isActive
-                                    ? 'border-yellow-400 scale-110 shadow-md shadow-yellow-500/30'
-                                    : 'border-zinc-700 hover:border-zinc-400 hover:scale-105'
+                                    ? 'border-[#d25e2d] scale-110 shadow-[0_0_0_3px_rgba(210,94,45,0.2)]'
+                                    : 'border-[#3a3a3d] hover:border-[#d25e2d]/70 hover:scale-105'
                                 }`}
                             >
                                 <Image

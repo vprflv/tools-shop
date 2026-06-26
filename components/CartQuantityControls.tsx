@@ -33,11 +33,11 @@ export default function CartQuantityControls({
         return (
             <button
                 onClick={handleAdd}
-                className={`w-full mt-5 bg-zinc-950 hover:bg-zinc-900 
-                border-2 border-yellow-400 hover:border-yellow-300
-                text-yellow-600 hover:text-yellow-200 font-semibold py-4 rounded-4xl 
+                className={`w-full mt-5 bg-[#252527] hover:bg-[#3a3a3d] 
+                border-2 border-[#d25e2d] hover:border-[#ff8a5c]
+                text-white hover:text-white font-semibold py-4 rounded-3xl 
                 flex items-center justify-center gap-3 transition-all text-base 
-                active:scale-[0.97] ${className}`}
+                active:scale-[0.97] shadow-sm ${className}`}
             >
                 <ShoppingCart className="w-5 h-5" />
                 Добавить в корзину
@@ -45,25 +45,27 @@ export default function CartQuantityControls({
         );
     }
 
-    // Компактный счётчик
+    // Счётчик когда товар уже в корзине
     return (
         <div className={`w-full ${className}`}>
-            <div className="flex items-center justify-center gap-4 bg-zinc-900 border border-zinc-700 rounded-4xl py-2.5 px-2">
+            <div className="flex items-center justify-center gap-4 bg-[#252527] border border-[#3a3a3d] rounded-3xl py-2.5 px-2">
 
                 <button
                     onClick={handleDecrease}
-                    className="w-9 h-9 flex items-center justify-center hover:bg-zinc-800 rounded-xl transition-colors active:scale-90"
+                    className="w-10 h-10 flex items-center justify-center hover:bg-[#3a3a3d]
+                               text-zinc-400 hover:text-white rounded-2xl transition-all active:scale-90"
                 >
                     <Minus className="w-4 h-4" />
                 </button>
 
-                <span className="text-lg text-yellow-400 font-semibold w-10 text-center tabular-nums">
-                {cartItem.quantity}
-            </span>
+                <span className="text-xl font-semibold text-[#d25e2d] w-12 text-center tabular-nums">
+                    {cartItem.quantity}
+                </span>
 
                 <button
                     onClick={() => updateQuantity(product.id, cartItem.quantity + 1)}
-                    className="w-9 h-9 flex items-center justify-center hover:bg-zinc-800 rounded-xl transition-colors active:scale-90"
+                    className="w-10 h-10 flex items-center justify-center hover:bg-[#3a3a3d]
+                               text-zinc-400 hover:text-white rounded-2xl transition-all active:scale-90"
                 >
                     <Plus className="w-4 h-4" />
                 </button>

@@ -1,5 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+
 import { useCatalog } from './hooks/useCatalog';
 import Filters from "./filters/Filters";
 import ProductCard from "./product/ProductCard";
@@ -9,7 +13,7 @@ import PriceAndSortFilters from "@/features/catalog/filters/components/PriceAndS
 import getPaginationPages from "@/lib/utils/pagination";
 import HelpSelection from "@/features/catalog/help/HelpSelection";
 import { ArrowUp } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import Pagination from "@/features/catalog/pagination/Pagination";
 
 type CatalogProps = {
     searchTerm: string;
@@ -35,7 +39,6 @@ export default function Catalog({
         currentPage,
         goToPage,
         itemsPerPage,
-
         selectedCategoryIds,
         setSelectedCategoryIds,
         selectedBrandIds,
@@ -53,28 +56,24 @@ export default function Catalog({
     } = useCatalog({ searchTerm });
 
     const [showScrollTop, setShowScrollTop] = useState(false);
+
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
 
     useEffect(() => {
-        const handleScroll = () => {
-            setShowScrollTop(window.scrollY > 400);
-        };
-
+        const handleScroll = () => setShowScrollTop(window.scrollY > 400);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 min-h-[calc(100vh-180px)] flex flex-col relative">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 min-h-[calc(100vh-180px)] flex flex-col relative bg-[#2e2e30]">
+
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 flex-1">
 
                 {/* Левая колонка фильтров */}
@@ -123,7 +122,7 @@ export default function Catalog({
                 {/* Основной контент */}
                 <div className="flex-1 flex flex-col">
 
-                    {/* Поиск и сортировка */}
+                    {/* Поиск */}
                     <div className="mb-8">
                         <SearchBar
                             value={searchTerm}
@@ -132,6 +131,7 @@ export default function Catalog({
                         />
                     </div>
 
+                    {/* Сортировка и количество */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                         <PriceAndSortFilters
                             sortBy={sortBy}
@@ -141,7 +141,7 @@ export default function Catalog({
                         />
 
                         <p className="hidden md:block text-zinc-400 text-sm md:text-base whitespace-nowrap">
-                            Показано: <span className="text-yellow-400 font-medium">
+                            Показано: <span className="text-[#d25e2d] font-medium">
                                 {productsLoading ? '—' : Math.min(currentPage * itemsPerPage, filteredProducts.length)}
                             </span> из {filteredProducts.length}
                         </p>
@@ -161,47 +161,11 @@ export default function Catalog({
                     </div>
 
                     {/* Пагинация */}
-                    {!productsLoading && totalPages > 1 && (
-                        <div className="mt-auto pt-12 pb-8 flex justify-center">
-                            <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-2">
-
-                                {/* Кнопка Назад */}
-                                <button
-                                    onClick={() => goToPage(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                    className="px-5 py-3 hover:bg-zinc-800 rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                                >
-                                    ← Назад
-                                </button>
-
-                                {/* Номера страниц */}
-                                <div className="flex items-center gap-1">
-                                    {getPaginationPages(currentPage, totalPages).map((page, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => typeof page === 'number' && goToPage(page)}
-                                            className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all text-sm font-medium ${
-                                                page === currentPage
-                                                    ? 'bg-yellow-400 text-black font-semibold scale-110 cursor-default'
-                                                    : 'hover:bg-zinc-800 text-zinc-300 hover:scale-105'
-                                            } ${page === '...' ? 'cursor-default text-zinc-500 pointer-events-none' : ''}`}
-                                        >
-                                            {page}
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {/* Кнопка Вперёд */}
-                                <button
-                                    onClick={() => goToPage(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                    className="px-5 py-3 hover:bg-zinc-800 rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                                >
-                                    Вперёд →
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        goToPage={goToPage}
+                    />
 
                     {/* Пустое состояние */}
                     {!productsLoading && filteredProducts.length === 0 && (
@@ -215,11 +179,13 @@ export default function Catalog({
                 </div>
             </div>
 
-            {/* ====================== КНОПКА "НАВЕРХ" (только десктоп) ====================== */}
+            {/* Кнопка "Наверх" */}
             {showScrollTop && (
                 <button
                     onClick={scrollToTop}
-                    className="hidden md:flex fixed bottom-8 right-8 z-50 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-yellow-400 text-white p-4 rounded-2xl shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
+                    className="hidden md:flex fixed bottom-8 right-8 z-50 bg-[#252527] hover:bg-[#3a3a3d]
+                               border border-[#3a3a3d] hover:border-[#d25e2d] text-white p-4 rounded-2xl
+                               shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
                     aria-label="Наверх"
                 >
                     <ArrowUp className="w-6 h-6" />

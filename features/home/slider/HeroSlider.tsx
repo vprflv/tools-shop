@@ -7,29 +7,29 @@ import Image from 'next/image';
 const slides = [
     {
         id: 1,
-        image: '/slider/taser1.jpg',
+        image: '/slider/drills301.jpg',
         badge: 'Новинка!',
-        title: 'Стреляющий электрошокер',
-        highlight: 'TASER',
-        price: '5 500 ₽',
+        title: 'Аккумуляторная дрель',
+        highlight: 'для любых задач',
+        price: '20 000 ₽',
         link: '/product/41',
     },
     {
         id: 2,
-        image: '/slider/309-21.jpg',
+        image: '/slider/saw.jpg',
         badge: 'Максимальный эффект!',
-        title: 'Электрошокер',
-        highlight: 'TW-309 Гепард',
-        price: '1900 ₽',
+        title: 'Ручная циркулярная пила',
+        highlight: 'Точные и быстрые распилы',
+        price: '17 000 ₽',
         link: '/product/43',
     },
     {
         id: 3,
-        image: '/slider/slide_916.jpg',
+        image: '/slider/toolsset.jpg',
         badge: 'Хит продаж',
-        title: 'Электрошокер',
-        highlight: 'ОСА-916 MAXI',
-        price: '2 100 ₽',
+        title: 'Набор ручного инструмента',
+        highlight: 'в удобном кейсе',
+        price: '6 800 ₽',
         link: '/product/42',
     },
 ];
@@ -40,7 +40,7 @@ export default function HeroSlider() {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % slides.length);
-        }, 10000);
+        }, 8000);
         return () => clearInterval(interval);
     }, []);
 
@@ -48,59 +48,65 @@ export default function HeroSlider() {
 
     return (
         <section className="relative py-6 md:py-8 overflow-hidden">
-            <div className="max-w-[1280px] mx-auto px-6">
-                <div className="relative h-[450px] md:h-[480px] rounded-3xl overflow-hidden shadow-2xl">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="relative h-[450px] md:h-[520px] rounded-3xl overflow-hidden shadow-2xl border border-[#3a3a3d]">
 
-                    {/* Изображение на фоне */}
+                    {/* Фоновое изображение */}
                     <Image
                         src={current.image}
-                        alt={current.highlight}
+                        alt={current.title}
                         fill
                         className="object-cover object-center"
                         priority
                     />
 
-                    {/* Лёгкое затемнение (можно убрать совсем, если захочешь) */}
-                    <div className="absolute inset-0 bg-black/30" />
+                    {/* Затемнение */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/80" />
 
-                    {/* Контент по центру */}
+                    {/* Контент */}
                     <div className="absolute inset-0 flex items-center justify-center px-6">
-                        <div className="text-center space-y-5 max-w-lg">
-                            <div className="inline-block bg-yellow-400 text-black text-xs font-semibold px-5 py-1.5 rounded-full">
+                        <div className="text-center space-y-6 max-w-lg">
+                            <div className="inline-block bg-[#d25e2d] text-black text-sm font-bold px-6 py-2 rounded-full tracking-wide">
                                 {current.badge}
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl font-bold leading-tight text-white">
-                                {current.title}<br />
-                                <span className="text-yellow-400">{current.highlight}</span>
+                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-[-1.5px] leading-tight text-white">
+                                {current.title}
+                                <br />
+                                <span className="text-[#d25e2d]">{current.highlight}</span>
                             </h1>
 
-                            <p className="text-3xl font-semibold text-white">{current.price}</p>
+                            <p className="text-4xl md:text-5xl font-bold text-white drop-shadow-md">
+                                {current.price}
+                            </p>
 
                             <Link
                                 href={current.link}
-                                className="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-semibold text-lg px-8 py-3.5 rounded-2xl transition-all"
+                                className="inline-block bg-[#d25e2d] hover:bg-[#c44a1c] text-black
+                                           font-semibold text-lg px-10 py-4 rounded-2xl
+                                           transition-all active:scale-95 shadow-lg
+                                           hover:shadow-[0_0_20px_#d25e2d] hover:ring-2 hover:ring-[#d25e2d]/50"
                             >
                                 Подробности
                             </Link>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Индикаторы */}
-            <div className="flex justify-center gap-3 mt-6">
-                {slides.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentIndex(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                            index === currentIndex
-                                ? 'bg-yellow-400 scale-125'
-                                : 'bg-white/40 hover:bg-white/70'
-                        }`}
-                    />
-                ))}
+                    {/* Индикаторы — теперь внутри слайда внизу */}
+                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+                        {slides.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentIndex(index)}
+                                className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${
+                                    index === currentIndex
+                                        ? 'bg-[#d25e2d] scale-125 shadow-[0_0_10px_#d25e2d]'
+                                        : 'bg-white/40 hover:bg-white/70'
+                                }`}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </section>
     );

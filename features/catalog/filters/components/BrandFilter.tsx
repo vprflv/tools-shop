@@ -1,4 +1,3 @@
-// features/catalog/filters/BrandFilter.tsx
 'use client';
 
 import { ChevronDown } from 'lucide-react';
@@ -20,7 +19,7 @@ export default function BrandFilter({
                                         selectedBrandIds,
                                         setSelectedBrandIds,
                                     }: BrandFilterProps) {
-    const [isOpen, setIsOpen] = useState(false); // ← Изменено на false
+    const [isOpen, setIsOpen] = useState(false);
 
     const toggleBrand = (id: string) => {
         if (selectedBrandIds.includes(id)) {
@@ -31,14 +30,14 @@ export default function BrandFilter({
     };
 
     return (
-        <div className="border-b border-zinc-800 pb-6 last:border-b-0 last:pb-0">
+        <div className="border-b border-[#3a3a3d] pb-6 last:border-b-0 last:pb-0">
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full flex items-center justify-between text-left py-2 group"
             >
-                <p className="text-sm font-medium text-yellow-400">Бренд</p>
+                <p className="text-sm font-semibold text-[#d25e2d]">Бренд</p>
                 <ChevronDown
-                    className={`w-5 h-5 text-zinc-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 text-zinc-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''} group-hover:text-[#d25e2d]`}
                 />
             </button>
 
@@ -58,12 +57,12 @@ export default function BrandFilter({
                                     type="checkbox"
                                     checked={selectedBrandIds.includes(brand.id)}
                                     onChange={() => toggleBrand(brand.id)}
-                                    className="peer w-5 h-5 accent-transparent border-2 border-zinc-600 rounded-md
+                                    className="peer w-5 h-5 accent-transparent border-2 border-[#3a3a3d] rounded-md
                                                cursor-pointer transition-all appearance-none
-                                               checked:border-yellow-400 checked:bg-yellow-400"
+                                               checked:border-[#d25e2d] checked:bg-[#d25e2d]"
                                 />
                                 <svg
-                                    className="absolute w-5 h-5 hidden peer-checked:block pointer-events-none"
+                                    className="absolute w-5 h-5 hidden peer-checked:block pointer-events-none text-black"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -74,7 +73,7 @@ export default function BrandFilter({
                                     <polyline points="20 6 9 17 4 12" />
                                 </svg>
                             </div>
-                            <span className="text-white text-[15px] group-hover:text-yellow-400 transition">
+                            <span className="text-white text-[15px] group-hover:text-[#d25e2d] transition-colors">
                                 {brand.name}
                             </span>
                         </label>

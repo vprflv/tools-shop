@@ -1,26 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-
+    --color-background: #2e2e30;
+    --color-block: #252527;
+    --color-accent: #d25e2d;
+    --color-accent-dark: #b84d24;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #a1a1aa;
+    --color-text-muted: #71717a;
 }
 
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
-}
-
-@theme inline {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
-    }
+    --background: #2e2e30;
+    --foreground: #ffffff;
+    --block: #252527;
+    --accent: #d25e2d;
 }
 
 /* ====================== ОСНОВНЫЕ СТИЛИ ====================== */
@@ -28,30 +22,57 @@
 body {
     background: var(--background);
     color: var(--foreground);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
-/* ====================== CURSOR POINTER ДЛЯ ВСЕХ ИНТЕРАКТИВНЫХ ЭЛЕМЕНТОВ ====================== */
+/* ====================== БЛОКИ И КАРТОЧКИ ====================== */
+
+.block, .card {
+    background-color: var(--block);
+    border: 1px solid #3a3a3d;
+}
+
+.card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+}
+
+/* ====================== ИСПРАВЛЕНИЕ ЛЕЙБЛОВ ====================== */
+/* Убираем все лишние обводки у label */
+label {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* Убираем фокус-обводку у label */
+label:focus,
+label:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* ====================== АКЦЕНТНЫЕ ЭЛЕМЕНТЫ ====================== */
+
+.btn-accent {
+    background-color: var(--accent);
+    color: white;
+}
+
+.btn-accent:hover {
+    background-color: #b84d24;
+}
+
+/* ====================== CURSOR POINTER ====================== */
 
 @layer base {
-    button,
-    a,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"],
-    label[for],
-    select,
-    details summary,
-    [role="button"],
-    [tabindex]:not([tabindex="-1"]) {
+    button, a, input[type="button"], input[type="submit"], input[type="reset"],
+    label[for], select, details summary, [role="button"] {
         cursor: pointer;
     }
 
-    /* Отключаем pointer у disabled элементов */
-    button:disabled,
-    input:disabled,
-    select:disabled,
-    [disabled] {
+    button:disabled, input:disabled, select:disabled, [disabled] {
         cursor: not-allowed !important;
     }
 }
@@ -64,38 +85,22 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #18181b;
+    background: #1a1a1c;
     border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #facc15, #eab308);
-    box-shadow: 0 0 10px #facc15,
-    0 0 20px #facc15,
-    0 0 30px #ca8a04;
+    background: linear-gradient(to bottom, #d25e2d, #b84d24);
+    border-radius: 9999px;
+    box-shadow: 0 0 8px rgba(210, 94, 45, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #facc15;
-    box-shadow: 0 0 12px #facc15,
-    0 0 20px #facc15;
+    background: #e06b3a;
 }
 
-/* Для Firefox */
+/* Firefox */
 html {
-    scrollbar-color: #eab308 #18181b;
+    scrollbar-color: #d25e2d #1a1a1c;
     scrollbar-width: thin;
-}
-
-/* Горизонтальный скролл */
-::-webkit-scrollbar-horizontal {
-    height: 6px;
-}
-
-::-webkit-scrollbar-thumb:horizontal {
-    background: #eab308;
-}
-
-::-webkit-scrollbar-thumb:horizontal:hover {
-    background: #facc15;
 }

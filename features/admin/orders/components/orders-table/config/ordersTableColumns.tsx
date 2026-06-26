@@ -1,22 +1,24 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import { Eye, Trash2 } from 'lucide-react';
+import { Eye, Trash2, Loader2 } from 'lucide-react';
 
 import { AdminOrder } from '@/features/admin/types/admin';
 
 type OrdersColumnsProps = {
     onView: (order: AdminOrder) => void;
     onDelete: (id: string, orderNumber: string) => void;
+    deletingId?: string | null;        // ← важно
 };
 
 export const ordersTableColumns = ({
                                        onView,
                                        onDelete,
+                                       deletingId = null,
                                    }: OrdersColumnsProps): ColumnDef<AdminOrder>[] => [
     {
         accessorKey: 'orderNumber',
         header: '№ Заказа',
         cell: ({ row }) => (
-            <span className="font-mono font-semibold text-yellow-400 text-sm md:text-base">
+            <span className="font-mono font-semibold text-[#d25e2d] text-sm md:text-base">
                 #{row.getValue('orderNumber')}
             </span>
         ),
@@ -82,11 +84,14 @@ export const ordersTableColumns = ({
         size: 100,
         cell: ({ row }) => {
             const order = row.original;
+            const isDeleting = deletingId === order.id;   // ← Главное
+
             return (
                 <div className="flex items-center gap-1 md:gap-2">
                     <button
                         onClick={() => onView(order)}
-                        className="p-3 md:p-2 hover:bg-zinc-800 rounded-xl transition text-blue-400 hover:text-blue-500"
+                        disabled={isDeleting}
+                        className="p-3 md:p-2 hover:bg-zinc-800 rounded-xl transition text-blue-400 hover:text-blue-500 disabled:opacity-50"
                         title="Просмотреть"
                     >
                         <Eye className="w-5 h-5 md:w-4 md:h-4" />
@@ -94,10 +99,15 @@ export const ordersTableColumns = ({
 
                     <button
                         onClick={() => onDelete(order.id, order.orderNumber)}
-                        className="p-3 md:p-2 hover:bg-zinc-800 rounded-xl text-red-400 hover:text-red-500 transition"
+                        disabled={isDeleting}
+                        className="p-3 md:p-2 hover:bg-zinc-800 rounded-xl text-red-400 hover:text-red-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
                         title="Удалить"
                     >
-                        <Trash2 className="w-5 h-5 md:w-4 md:h-4" />
+                        {isDeleting ? (
+                            <Loader2 className="w-5 h-5 md:w-4 md:h-4 animate-spin" />
+                        ) : (
+                            <Trash2 className="w-5 h-5 md:w-4 md:h-4" />
+                        )}
                     </button>
                 </div>
             );

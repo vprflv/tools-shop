@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { toast } from 'sonner';
-import Link from 'next/link';   // ← добавили
+import Link from 'next/link';
 
 export default function CallbackModal({
                                           isOpen,
@@ -17,7 +17,7 @@ export default function CallbackModal({
         phone: '',
         comment: '',
     });
-    const [agreePolicy, setAgreePolicy] = useState(false);   // ← новое состояние
+    const [agreePolicy, setAgreePolicy] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -58,22 +58,32 @@ export default function CallbackModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-            <div className="bg-zinc-900 border border-zinc-700 rounded-3xl w-full max-w-md">
-                <div className="flex justify-between px-6 py-5 border-b border-zinc-700">
-                    <h2 className="text-2xl text-yellow-400 font-semibold">Перезвоните мне</h2>
-                    <button onClick={onClose} className="text-zinc-400 hover:text-white">
-                        <X className="w-6 h-6 hover:text-yellow-400" />
+            <div className="bg-[#252527] border border-[#3a3a3d] rounded-3xl w-full max-w-md overflow-hidden">
+
+                {/* Заголовок */}
+                <div className="flex justify-between items-center px-6 py-5 border-b border-[#3a3a3d]">
+                    <h2 className="text-2xl font-semibold text-[#d25e2d]">
+                        Перезвоните мне
+                    </h2>
+                    <button
+                        onClick={onClose}
+                        className="text-zinc-400 hover:text-white transition-colors"
+                    >
+                        <X className="w-6 h-6 hover:text-[#d25e2d]" />
                     </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-5">
                     <div>
-                        <label className="text-sm text-zinc-400 mb-1.5 block">Имя</label>
+                        <label className="text-sm text-zinc-400 mb-1.5 block select-none">Имя</label>
                         <input
                             type="text"
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 focus:border-yellow-400"
+                            className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-4 py-3
+                                        focus:outline-none
+                                       focus:border-[#d25e2d] focus:ring-1 focus:ring-[#d25e2d]
+                                       text-white placeholder:text-zinc-500 transition-all"
                             placeholder="Как к вам обращаться?"
                             required
                         />
@@ -85,7 +95,10 @@ export default function CallbackModal({
                             type="tel"
                             value={formData.phone}
                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 focus:border-yellow-400"
+                            className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-4 py-3
+                                        focus:outline-none
+                                       focus:border-[#d25e2d] focus:ring-1 focus:ring-[#d25e2d]
+                                       text-white placeholder:text-zinc-500 transition-all"
                             placeholder="+7 (___) ___-__-__"
                             required
                         />
@@ -96,19 +109,23 @@ export default function CallbackModal({
                         <textarea
                             value={formData.comment}
                             onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-                            className="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 min-h-[100px] focus:border-yellow-400"
+                            className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-4 py-3
+                                       min-h-[100px]
+                                       focus:outline-none
+                                       focus:border-[#d25e2d] focus:ring-1 focus:ring-[#d25e2d]
+                                       text-white placeholder:text-zinc-500 transition-all resize-y"
                             placeholder="Когда удобно перезвонить? Есть вопросы..."
                         />
                     </div>
 
-                    {/* Чекбокс согласия с политикой */}
+                    {/* Чекбокс */}
                     <div className="pt-2">
                         <label className="flex items-start gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={agreePolicy}
                                 onChange={(e) => setAgreePolicy(e.target.checked)}
-                                className="mt-1 w-5 h-5 accent-yellow-400"
+                                className="mt-1 w-5 h-5 accent-[#d25e2d] bg-[#1c1c1e] border-[#3a3a3d]"
                                 required
                             />
                             <span className="text-sm text-zinc-400">
@@ -116,7 +133,7 @@ export default function CallbackModal({
                                 <Link
                                     href="/policy/privacy"
                                     target="_blank"
-                                    className="text-yellow-400 hover:text-yellow-300 hover:underline transition-colors"
+                                    className="text-[#d25e2d] hover:text-[#ff8a5c] hover:underline transition-colors"
                                 >
                                     политикой конфиденциальности
                                 </Link>{' '}
@@ -125,10 +142,14 @@ export default function CallbackModal({
                         </label>
                     </div>
 
+                    {/* Кнопка отправки */}
                     <button
                         type="submit"
                         disabled={loading || !agreePolicy}
-                        className="w-full bg-yellow-400 hover:bg-yellow-500 disabled:opacity-70 text-black font-semibold py-4 rounded-2xl transition"
+                        className="w-full bg-[#d25e2d] hover:bg-[#c44a1c] disabled:opacity-70
+                                   text-black font-semibold py-4 rounded-2xl transition-all
+                                   active:scale-[0.98] text-lg shadow-md
+                                   hover:shadow-[0_0_15px_#d25e2d] hover:ring-1 hover:ring-[#d25e2d]/50"
                     >
                         {loading ? 'Отправляем...' : 'Отправить заявку'}
                     </button>

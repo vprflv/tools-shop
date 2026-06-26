@@ -23,11 +23,10 @@ export async function DELETE(
             return NextResponse.json({ error: 'Заказ не найден' }, { status: 404 });
         }
 
-        await prisma.order.delete({
-            where: { id },
-        });
+        await prisma.order.delete({ where: { id } });
 
         revalidatePath('/admin/orders');
+        revalidatePath('/admin'); // на всякий случай
 
         return NextResponse.json({
             success: true,
@@ -36,6 +35,9 @@ export async function DELETE(
 
     } catch (error: any) {
         console.error('Delete order error:', error);
-        return NextResponse.json({ error: 'Ошибка при удалении заказа' }, { status: 500 });
+        return NextResponse.json({
+            success: false,
+            error: 'Ошибка при удалении заказа'
+        }, { status: 500 });
     }
 }

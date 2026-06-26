@@ -19,7 +19,6 @@ type FiltersProps = {
     availableBrands: { id: string; name: string }[];
     availableCategories: { id: string; name: string }[];
 
-
     isOpen?: boolean;
     onClose?: () => void;
 };
@@ -29,30 +28,29 @@ export default function Filters(props: FiltersProps) {
 
     const handleReset = () => {
         props.onReset();
-        onClose?.();           // закрываем drawer после сброса
+        onClose?.();
     };
 
     return (
         <>
             {/* ====================== ДЕСКТОПНЫЙ САЙДБАР ====================== */}
-            <div className="hidden lg:block bg-zinc-950 border border-zinc-800 rounded-3xl p-6 sticky top-24 w-80 flex-shrink-0">
+            <div className="hidden lg:block bg-[#252527] border border-[#3a3a3d] rounded-3xl p-6 sticky top-24 w-80 flex-shrink-0">
                 <SideFilters {...props} onReset={handleReset} />
             </div>
 
-            {/* ====================== МОБИЛЬНЫЙ LEFT DRAWER ====================== */}
+            {/* ====================== МОБИЛЬНЫЙ DRAWER ====================== */}
             {isOpen && onClose && (
-                <div className="lg:hidden fixed inset-0 z-[60] bg-black/70 flex">
-                    {/* Панель, выдвигается слева */}
+                <div className="lg:hidden fixed inset-0 z-[60] bg-black/80 flex">
                     <div
-                        className="bg-zinc-900 w-80 max-w-[85vw] h-full shadow-2xl flex flex-col overflow-hidden"
+                        className="bg-[#252527] w-80 max-w-[85vw] h-full shadow-2xl flex flex-col overflow-hidden border-r border-[#3a3a3d]"
                         onClick={e => e.stopPropagation()}
                     >
                         {/* Заголовок */}
-                        <div className="p-5 border-b border-zinc-800 flex items-center justify-between flex-shrink-0">
-                            <h3 className="text-xl font-semibold">Фильтры</h3>
+                        <div className="p-5 border-b border-[#3a3a3d] flex items-center justify-between flex-shrink-0">
+                            <h3 className="text-xl font-semibold text-white">Фильтры</h3>
                             <button
                                 onClick={onClose}
-                                className="p-2 -mr-2 text-zinc-400 hover:text-white"
+                                className="p-2 -mr-2 text-zinc-400 hover:text-white transition-colors"
                             >
                                 <X className="w-7 h-7" />
                             </button>
@@ -64,7 +62,7 @@ export default function Filters(props: FiltersProps) {
                         </div>
                     </div>
 
-                    {/* Закрытие по клику на пустую область справа */}
+                    {/* Закрытие по клику вне панели */}
                     <div className="flex-1" onClick={onClose} />
                 </div>
             )}
@@ -72,7 +70,7 @@ export default function Filters(props: FiltersProps) {
     );
 }
 
-/* ====================== БОКОВЫЕ ФИЛЬТРЫ ====================== */
+/* ====================== ВНУТРЕННИЕ ФИЛЬТРЫ ====================== */
 function SideFilters({
                          selectedCategoryIds,
                          setSelectedCategoryIds,
@@ -103,7 +101,7 @@ function SideFilters({
             {/* Кнопка сброса */}
             <button
                 onClick={onReset}
-                className="text-sm text-zinc-400 hover:text-red-400 flex items-center gap-1.5 mx-auto mt-6"
+                className="text-sm text-zinc-400 hover:text-[#d25e2d] flex items-center gap-1.5 mx-auto mt-6 transition-colors"
             >
                 <X className="w-4 h-4" /> Сбросить фильтры
             </button>

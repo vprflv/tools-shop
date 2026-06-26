@@ -79,7 +79,6 @@ export function useCatalog({ searchTerm }: UseCatalogProps) {
         filters.priceRange[1],
         filters.sortBy,
         searchTerm,
-        currentPage,
         goToPage,
     ]);
 

@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { useCart } from '@/store/useCart';
+
 
 import HeaderMobile from "@/components/header/HeaderMobile";
 import HeaderDesktop from "@/components/header/ HeaderDesktop";
-
 
 interface NavbarProps {
     onCartClick: () => void;
@@ -13,7 +12,7 @@ interface NavbarProps {
     isFiltersOpen: boolean;
     setIsFiltersOpen: (open: boolean) => void;
     isMounted: boolean;
-    showFiltersAndCart?: boolean;   // ← добавили
+    showFiltersAndCart?: boolean;
 }
 
 export default function Navbar({
@@ -27,22 +26,26 @@ export default function Navbar({
     const { totalItems } = useCart();
 
     return (
-        <header className="sticky top-0 z-50 bg-zinc-950 border-b border-zinc-950">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <header className="sticky top-0 z-50 bg-[#222224]">
+            {/* Контейнер с такой же шириной и границами, как в контенте */}
+            <div className="max-w-7xl mx-auto  bg-[#19191a]">
+                <div className="px-4 sm:px-6">
 
-                <HeaderDesktop
-                    onCartClick={onCartClick}
-                    totalItems={totalItems()}
-                    isMounted={isMounted}
-                />
+                    <HeaderDesktop
+                        onCartClick={onCartClick}
+                        totalItems={totalItems()}
+                        isMounted={isMounted}
+                    />
 
-                <HeaderMobile
-                    onCartClick={onCartClick}
-                    totalItems={totalItems()}
-                    isMounted={isMounted}
-                    onFiltersClick={onFiltersClick}
-                    showFiltersAndCart={showFiltersAndCart}   // ← исправлено!
-                />
+                    <HeaderMobile
+                        onCartClick={onCartClick}
+                        totalItems={totalItems()}
+                        isMounted={isMounted}
+                        onFiltersClick={onFiltersClick}
+                        showFiltersAndCart={showFiltersAndCart}
+                    />
+
+                </div>
             </div>
         </header>
     );
