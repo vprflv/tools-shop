@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Package, ShoppingCart, Settings, X } from 'lucide-react';
+import { Home, Package, ShoppingCart, Settings, Hammer, X } from 'lucide-react';
 import LogoutButton from "@/features/admin/logout/components/LogoutButton";
 
 interface AdminSidebarProps {
@@ -27,21 +27,21 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
     return (
         <div className={`
-            fixed md:static inset-y-0 left-0 z-50 w-72 bg-zinc-900 border-r border-zinc-800 
+            fixed md:static inset-y-0 left-0 z-50 w-72 bg-[#252527] border-r border-[#3a3a3d] 
             transform transition-transform duration-300 ease-in-out
             ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
             flex flex-col
         `}>
 
             {/* Логотип + кнопка закрытия */}
-            <div className="p-6 border-b border-zinc-800 flex items-center justify-between md:justify-start">
+            <div className="p-6 border-b border-[#3a3a3d] flex items-center justify-between md:justify-start">
                 <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-yellow-400 rounded-xl flex items-center justify-center">
-                        <span className="text-black font-bold text-xl">⚡</span>
+                    <div className="w-9 h-9 bg-[#d25e2d] rounded-xl flex items-center justify-center">
+                        <Hammer className="w-5 h-5 text-black" />
                     </div>
-                    <div className={"cursor-pointer"}>
-                        <div className="font-semibold text-lg">ElectroShock</div>
-                        <div className="text-xs text-zinc-500">Админ-панель</div>
+                    <div>
+                        <div className="font-bold text-xl tracking-tight">ИнсTRYмент</div>
+                        <div className="text-xs text-zinc-500 -mt-1">Админ-панель</div>
                     </div>
                 </div>
 
@@ -62,8 +62,8 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                         onClick={onClose}
                         className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl transition text-base ${
                             isActive(href)
-                                ? 'bg-zinc-800 text-white font-medium'
-                                : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                                ? 'bg-[#3a3a3d] text-white font-medium'
+                                : 'text-zinc-400 hover:bg-[#3a3a3d] hover:text-white'
                         }`}
                     >
                         <Icon className="w-5 h-5" />
@@ -73,7 +73,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             </nav>
 
             {/* Выход */}
-            <div className="p-4 border-t border-zinc-800 mt-auto">
+            <div className="p-4 border-t border-[#3a3a3d] mt-auto">
                 <LogoutButton />
             </div>
         </div>

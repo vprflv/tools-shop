@@ -25,7 +25,7 @@ export function useAdminProducts() {
         refetchOnWindowFocus: false,
     });
 
-    // Мутация удаления с красивым подтверждением
+
     const deleteMutation = useMutation({
         mutationFn: async (id: number) => {
             const res = await fetch(`/api/admin/products/${id}`, {
@@ -38,60 +38,81 @@ export function useAdminProducts() {
             }
             return id;
         },
-        onSuccess: async (id) => {
-            // Оптимистическое обновление
-            queryClient.setQueryData(['adminProducts'], (old: AdminProduct[] | undefined) =>
-                old?.filter(p => p.id !== id) || []
+        onMutate: async (id: number) => {
+            await queryClient.cancelQueries({ queryKey: ['adminProducts'] });
+            const previousProducts = queryClient.getQueryData<AdminProduct[]>(['adminProducts']);
+
+            queryClient.setQueryData<AdminProduct[]>(['adminProducts'], (old = []) =>
+                old.filter(p => p.id !== id)
             );
 
+            return { previousProducts };
+        },
+        onSuccess: async (id) => {
             await revalidateAllProducts();
             toast.success('Товар успешно удалён');
         },
-        onError: (err: any) => {
-            toast.error(err.message || 'Ошибка при удалении товара');
+
+        onError: (err: any, id, context) => {
+            if (context?.previousProducts) {
+                queryClient.setQueryData(['adminProducts'], context.previousProducts);
+            }
+            toast.error(err.message || 'Не удалось удалить товар');
         },
     });
 
     // Функция с подтверждением через toast
-    const deleteProduct = async (id: number, name: string) => {
-        toast.error(`Удалить товар "${name}"?`, {
+    // const deleteProduct = async (id: number, name: string) => {
+    //     toast.error(`Удалить товар "${name}"?`, {
+    //         description: "Это действие нельзя отменить",
+    //         action: {
+    //             label: "Да, удалить",
+    //             onClick: async () => {
+    //                 try {
+    //                     const res = await fetch(`/api/admin/products/${id}`, {
+    //                         method: 'DELETE'
+    //                     });
+    //
+    //                     const data = await res.json();
+    //
+    //                     if (res.status === 409) {
+    //                         let message = data.message + '\n\n';
+    //                         if (data.orders && data.orders.length > 0) {
+    //                             message += 'Заказы:\n';
+    //                             data.orders.forEach((o: any) => {
+    //                                 message += `• #${o.orderNumber} (${o.status}) от ${o.date}\n`;
+    //                             });
+    //                         }
+    //                         toast.error(message, { duration: 8000 });
+    //                         return;
+    //                     }
+    //
+    //                     if (!res.ok) throw new Error();
+    //
+    //                     toast.success(`Товар "${name}" успешно удалён`);
+    //                     await revalidateAllProducts();
+    //
+    //                 } catch (err) {
+    //                     toast.error('Не удалось удалить товар');
+    //                 }
+    //             },
+    //         },
+    //         cancel: {
+    //             label: "Отмена",
+    //             onClick: () => console.log("отмена"),
+    //         },
+    //         duration: 7000,
+    //     });
+    // };
+
+    const deleteProduct = (id: number, name: string) => {
+        toast(`Удалить товар "${name}"?`, {
             description: "Это действие нельзя отменить",
             action: {
                 label: "Да, удалить",
-                onClick: async () => {
-                    try {
-                        const res = await fetch(`/api/admin/products/${id}`, {
-                            method: 'DELETE'
-                        });
-
-                        const data = await res.json();
-
-                        if (res.status === 409) {
-                            let message = data.message + '\n\n';
-                            if (data.orders && data.orders.length > 0) {
-                                message += 'Заказы:\n';
-                                data.orders.forEach((o: any) => {
-                                    message += `• #${o.orderNumber} (${o.status}) от ${o.date}\n`;
-                                });
-                            }
-                            toast.error(message, { duration: 8000 });
-                            return;
-                        }
-
-                        if (!res.ok) throw new Error();
-
-                        toast.success(`Товар "${name}" успешно удалён`);
-                        // invalidate queries / refetch...
-
-                    } catch (err) {
-                        toast.error('Не удалось удалить товар');
-                    }
-                },
+                onClick: () => deleteMutation.mutate(id),   // ← Важно! Вызываем мутацию
             },
-            cancel: {
-                label: "Отмена",
-                onClick: () => console.log("отмена"),
-            },
+            cancel: { label: "Отмена", onClick: () => {} },
             duration: 7000,
         });
     };

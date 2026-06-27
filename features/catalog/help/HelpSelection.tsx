@@ -36,9 +36,11 @@ export default function HelpSelection() {
                     <Link
                         key={index}
                         href={item.href}
-                        className="group block"
+                        className="group block border-0 outline-none focus:outline-none"
                     >
-                        <div className="relative h-40 bg-[#1c1c1e] rounded-2xl overflow-hidden mb-3 border border-[#3a3a3d]">
+                        <div className="relative h-40 bg-[#1c1c1e] rounded-2xl overflow-hidden
+                                        border border-[#3a3a3d] group-hover:border-[#d25e2d]
+                                        transition-all duration-300">
                             <Image
                                 src={item.image}
                                 alt={item.alt}
@@ -47,12 +49,15 @@ export default function HelpSelection() {
                                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                         </div>
-                        <p className="font-medium leading-tight text-white group-hover:text-[#d25e2d] transition-colors">
-                            {item.title}
-                        </p>
-                        <p className="text-[#d25e2d] text-sm mt-1 inline-flex items-center gap-1 group-hover:underline">
-                            Читать статью →
-                        </p>
+
+                        <div className="pt-4 px-1">
+                            <p className="font-medium leading-tight text-white group-hover:text-[#d25e2d] transition-colors">
+                                {item.title}
+                            </p>
+                            <p className="text-[#d25e2d] text-sm mt-1 inline-flex items-center gap-1 group-hover:underline">
+                                Читать статью →
+                            </p>
+                        </div>
                     </Link>
                 ))}
             </div>

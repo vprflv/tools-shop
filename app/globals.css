@@ -29,7 +29,6 @@ body {
 
 .block, .card {
     background-color: var(--block);
-    border: 1px solid #3a3a3d;
 }
 
 .card:hover {
@@ -103,4 +102,8 @@ label:focus-visible {
 html {
     scrollbar-color: #d25e2d #1a1a1c;
     scrollbar-width: thin;
+}
+.help-card,
+.help-card * {
+    border-color: transparent !important;
 }

@@ -8,9 +8,13 @@ import { AdminProduct } from "@/features/admin/types/admin";
 
 interface AdminProductsDataTableProps {
     table: Table<AdminProduct>;
+    deletingId?: number | null;   // ← Добавили
 }
 
-export default function AdminProductsDataTable({ table }: AdminProductsDataTableProps) {
+export default function AdminProductsDataTable({
+                                                   table,
+                                                   deletingId = null
+                                               }: AdminProductsDataTableProps) {
     return (
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
@@ -27,8 +31,8 @@ export default function AdminProductsDataTable({ table }: AdminProductsDataTable
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                     {header.column.getIsSorted() && (
                                         <span className="ml-1">
-                                                {header.column.getIsSorted() === 'desc' ? '↓' : '↑'}
-                                            </span>
+                                            {header.column.getIsSorted() === 'desc' ? '↓' : '↑'}
+                                        </span>
                                     )}
                                 </th>
                             ))}
@@ -37,21 +41,29 @@ export default function AdminProductsDataTable({ table }: AdminProductsDataTable
                     </thead>
                     <tbody>
                     {table.getRowModel().rows.length ? (
-                        table.getRowModel().rows.map(row => (
-                            <tr
-                                key={row.id}
-                                className="border-b border-zinc-800 hover:bg-zinc-800/60 transition"
-                            >
-                                {row.getVisibleCells().map(cell => (
-                                    <td
-                                        key={cell.id}
-                                        className="px-4 md:px-6 py-4 text-sm md:text-base"
-                                    >
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))
+                        table.getRowModel().rows.map(row => {
+                            const isDeleting = deletingId === row.original.id;   // ← Главное
+
+                            return (
+                                <tr
+                                    key={row.id}
+                                    className={`border-b border-zinc-800 transition-all duration-200
+                                        ${isDeleting
+                                        ? 'opacity-50 pointer-events-none bg-red-500/10'
+                                        : 'hover:bg-zinc-800/60'
+                                    }`}
+                                >
+                                    {row.getVisibleCells().map(cell => (
+                                        <td
+                                            key={cell.id}
+                                            className="px-4 md:px-6 py-4 text-sm md:text-base"
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </td>
+                                    ))}
+                                </tr>
+                            );
+                        })
                     ) : (
                         <tr>
                             <td colSpan={7} className="py-16 text-center text-zinc-500">

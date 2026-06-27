@@ -59,7 +59,10 @@ export default function AdminProductsTable() {
                 value={globalFilter}
                 onChange={setGlobalFilter}
             />
-            <AdminProductsDataTable table={table} />
+            <AdminProductsDataTable
+                table={table}
+                deletingId={deletingId}
+            />
             <AdminProductsPagination table={table} />
         </div>
     );

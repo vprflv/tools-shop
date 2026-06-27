@@ -12,7 +12,7 @@ const slides = [
         title: 'Аккумуляторная дрель',
         highlight: 'для любых задач',
         price: '20 000 ₽',
-        link: '/product/41',
+        link: '/product/56',
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ const slides = [
         title: 'Ручная циркулярная пила',
         highlight: 'Точные и быстрые распилы',
         price: '17 000 ₽',
-        link: '/product/43',
+        link: '/product/57',
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ const slides = [
         title: 'Набор ручного инструмента',
         highlight: 'в удобном кейсе',
         price: '6 800 ₽',
-        link: '/product/42',
+        link: '/product/58',
     },
 ];
 

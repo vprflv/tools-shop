@@ -19,7 +19,7 @@ export function useCatalogFilters({
 
     const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
     const [selectedBrandIds, setSelectedBrandIds] = useState<string[]>([]);
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 20000]);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999999]);
     const [inStockOnly, setInStockOnly] = useState(false);
     const [sortBy, setSortBy] = useState<SortOption>('popular');
 
@@ -81,7 +81,7 @@ export function useCatalogFilters({
     const resetFilters = useCallback(() => {
         setSelectedCategoryIds([]);
         setSelectedBrandIds([]);
-        setPriceRange([0, 20000]);
+        setPriceRange([0, 9999999]);
         setInStockOnly(false);
         setSortBy('popular');
     }, []);

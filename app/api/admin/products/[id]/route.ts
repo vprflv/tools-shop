@@ -57,11 +57,12 @@ export async function DELETE(
             }, { status: 409 });
         }
 
-        // Удаляем товар
+
         const deletedProduct = await prisma.product.delete({
             where: { id: productId },
             select: { name: true, article: true }
         });
+        await revalidateAllProducts();
 
         return NextResponse.json({
             message: `Товар "${deletedProduct.name}" (${deletedProduct.article}) успешно удалён`

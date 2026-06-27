@@ -8,6 +8,7 @@ import { useMounted } from "@/hooks/useMounted";
 import Navbar from "@/components/Navbar";
 import Catalog from "@/features/catalog/Catalog";
 import CartModal from "@/features/cart/CartModal";
+import Footer from "@/components/footer/Footer";
 
 export default function CatalogClient() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -24,7 +25,7 @@ export default function CatalogClient() {
 
 
     return (
-        <div className="min-h-screen bg-zinc-950 text-white">
+        <div className="min-h-screen bg-[#222224] text-white">
 
             <Navbar
                 onCartClick={handleCartOpen}
@@ -41,9 +42,7 @@ export default function CatalogClient() {
                 setIsFiltersOpen={setIsFiltersOpen}
             />
 
-            <footer className="bg-black py-10 text-center text-zinc-500 border-t border-zinc-900 mt-12">
-                <p>© 2026 ElectroShock Store • Все права защищены • 18+</p>
-            </footer>
+
 
             <CartModal
                 isOpen={isCartOpen}

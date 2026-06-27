@@ -1,4 +1,3 @@
-// app/api/admin/products/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createServerSupabase } from '@/lib/supabase';
@@ -11,42 +10,52 @@ export async function POST(request: NextRequest) {
         const formData = await request.formData();
 
         const name = formData.get('name') as string;
-        const article = formData.get('article') as string;
+        const article = (formData.get('article') as string)?.trim();
         const price = parseFloat(formData.get('price') as string);
         const oldPrice = formData.get('oldPrice') ? parseFloat(formData.get('oldPrice') as string) : null;
         const stock = parseInt(formData.get('stock') as string);
-        const description = formData.get('description') as string;
+        const description = formData.get('description') as string || '';
         const categoryId = formData.get('categoryId') as string;
         const brandId = formData.get('brandId') as string;
         const specsJson = formData.get('specs') as string | null;
 
         const images = formData.getAll('images') as File[];
 
+        if (!article) {
+            return NextResponse.json({ error: 'Артикул обязателен' }, { status: 400 });
+        }
+
+        // === ПРОВЕРКА НА СУЩЕСТВОВАНИЕ АРТИКУЛА ===
+        const existingProduct = await prisma.product.findUnique({
+            where: { article },
+            select: { id: true, name: true }
+        });
+
+        if (existingProduct) {
+            return NextResponse.json({
+                success: false,
+                error: `Товар с артикулом "${article}" уже существует`,
+                existingProductName: existingProduct.name
+            }, { status: 409 }); // 409 Conflict
+        }
+
         const imagePaths: string[] = [];
         const imageUrls: string[] = [];
-
         const supabase = await createServerSupabase();
 
-        // Загрузка изображений в Supabase Storage
+        // Загрузка изображений
         for (const image of images) {
             const fileExt = image.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
             const { error: uploadError } = await supabase.storage
                 .from(BUCKET_NAME)
-                .upload(fileName, image, {
-                    cacheControl: '3600',
-                    upsert: false,
-                });
+                .upload(fileName, image, { cacheControl: '3600', upsert: false });
 
-            if (uploadError) {
-                console.error('Upload error:', uploadError);
-                throw new Error(`Не удалось загрузить файл ${image.name}`);
-            }
+            if (uploadError) throw new Error(`Не удалось загрузить файл ${image.name}`);
 
             imagePaths.push(fileName);
 
-            // Получаем публичный URL
             const { data: publicUrlData } = supabase.storage
                 .from(BUCKET_NAME)
                 .getPublicUrl(fileName);
@@ -54,6 +63,7 @@ export async function POST(request: NextRequest) {
             imageUrls.push(publicUrlData.publicUrl);
         }
 
+        // Создание товара
         const product = await prisma.product.create({
             data: {
                 name,
@@ -65,7 +75,7 @@ export async function POST(request: NextRequest) {
                 categoryId,
                 brandId,
                 images: imageUrls,
-                imagePaths: imagePaths,
+                imagePaths,
                 specs: specsJson ? JSON.parse(specsJson) : {},
                 features: [],
             },
@@ -75,14 +85,15 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({
             success: true,
-            product
+            product,
+            message: 'Товар успешно создан'
         }, { status: 201 });
 
     } catch (error: any) {
         console.error('Create product error:', error);
         return NextResponse.json({
             success: false,
-            error: error.message || 'Ошибка создания товара'
+            error: error.message || 'Ошибка при создании товара'
         }, { status: 500 });
     }
 }

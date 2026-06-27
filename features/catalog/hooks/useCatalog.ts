@@ -62,7 +62,7 @@ export function useCatalog({ searchTerm }: UseCatalogProps) {
             filters.inStockOnly ||
             searchTerm.trim() !== '' ||
             filters.priceRange[0] !== 0 ||
-            filters.priceRange[1] !== 20000 ||
+            filters.priceRange[1] !== 9999999 ||
             filters.sortBy !== 'popular';
 
         console.log(`[useEffect автосброс] hasActiveFilters = ${hasActiveFilters}, currentPage = ${currentPage}`);

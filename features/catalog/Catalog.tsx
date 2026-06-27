@@ -72,7 +72,7 @@ export default function Catalog({
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 min-h-[calc(100vh-180px)] flex flex-col relative bg-[#2e2e30]">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10 min-h-[calc(100vh-180px)] flex flex-col relative bg-[#19191a]">
 
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 flex-1">
 

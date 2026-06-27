@@ -161,19 +161,25 @@ export const getProductForEdit = async (id: number) => {
 
 // Инвалидация кэша
 export const revalidateAllProducts = async () => {
-    "use server";
-
     try {
-        revalidateTag('products', 'default');
-        revalidateTag('catalog', 'default');
-        revalidateTag('all-light-products', 'default');
-        revalidateTag('all-products-admin', 'default');
-        revalidateTag('product', 'default');
 
-        // Дополнительная инвалидация путей
+        const profile = 'max';
+
+
+        revalidateTag('admin-products', profile);
+        revalidateTag('products', profile);
+        revalidateTag('catalog', profile);
+        revalidateTag('all-light-products', profile);
+        revalidateTag('all-products-admin', profile);
+        revalidateTag('product', profile);
+
+        // Пути тоже инвалидируем
         revalidatePath('/admin/products');
         revalidatePath('/admin');
+        revalidatePath('/catalog');
         revalidatePath('/');
+
+        console.log('✅ Кэш товаров успешно инвалидирован');
     } catch (error) {
         console.error('Revalidation error:', error);
     }

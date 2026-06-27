@@ -13,7 +13,7 @@ export default function ProductSpecs({ product }: { product: Product }) {
                 {Object.entries(product.specs || {}).map(([key, value]) => (
                     <div
                         key={key}
-                        className="flex items-start sm:items-center border-b border-[#3a3a3d] pb-3 last:border-none last:pb-0 gap-3 sm:gap-4"
+                        className="flex items-start sm:items-center pb-3 last:border-none last:pb-0 gap-3 sm:gap-4"
                     >
                         {/* Название характеристики */}
                         <span className="text-zinc-400 text-sm sm:text-base min-w-[120px] sm:min-w-[140px] flex-shrink-0">

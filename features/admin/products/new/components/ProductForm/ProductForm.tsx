@@ -10,7 +10,6 @@ import { useBrands } from "@/features/admin/products/new/hooks/useBrands";
 import { useSpecs } from "@/features/admin/products/new/hooks/useSpecs";
 import { toast } from 'sonner';
 
-
 import SpecsSelector from "@/features/admin/products/new/components/ProductForm/specs/SpecsSelector";
 import ProductImageUpload from "@/features/admin/products/new/components/images/ProductImageUpload";
 import CategorySelector from "@/features/admin/products/new/components/ProductForm/category/CategorySelector";
@@ -24,11 +23,7 @@ import DeleteBrandModal from "@/features/admin/products/new/components/ProductFo
 
 import { revalidateAllProducts } from "@/features/actions/productActions";
 import BasicProductFields from "@/features/admin/products/components/fields/BasicProductFields";
-import {ProductFormData, productSchema} from "@/features/admin/types/products-form";
-
-
-
-
+import { ProductFormData, productSchema } from "@/features/admin/types/products-form";
 
 export default function ProductForm() {
     const [images, setImages] = useState<File[]>([]);
@@ -56,10 +51,9 @@ export default function ProductForm() {
     });
 
     const onSubmit = async (data: ProductFormData) => {
-        // ... твой текущий onSubmit без изменений
         setIsLoading(true);
-        const formData = new FormData();
 
+        const formData = new FormData();
         formData.append('name', data.name);
         formData.append('article', data.article);
         formData.append('price', data.price);
@@ -80,26 +74,47 @@ export default function ProductForm() {
         images.forEach(file => formData.append('images', file));
 
         try {
-            const res = await fetch('/api/admin/products', { method: 'POST', body: formData });
-            if (!res.ok) throw new Error();
-
-            await revalidateAllProducts();
-            toast.success('✅ Товар успешно создан!', {
-                description: `${data.name} добавлен в каталог`,
+            const res = await fetch('/api/admin/products', {
+                method: 'POST',
+                body: formData
             });
-            window.location.href = '/admin/products';
+
+            const responseData = await res.json();
+
+            if (res.ok && responseData.success) {
+                await revalidateAllProducts();
+                toast.success('✅ Товар успешно создан!', {
+                    description: `${data.name} добавлен в каталог`,
+                });
+                window.location.href = '/admin/products';
+            } else {
+                // ← Здесь обрабатываем конкретные ошибки
+                if (responseData.error?.includes('уже существует') || res.status === 409) {
+                    toast.error('Товар с таким артикулом уже существует', {
+                        description: responseData.existingProductName
+                            ? `Существующий товар: ${responseData.existingProductName}`
+                            : undefined
+                    });
+                } else {
+                    toast.error('Ошибка при создании товара', {
+                        description: responseData.error || 'Неизвестная ошибка'
+                    });
+                }
+            }
         } catch (err: any) {
-            toast.error('Ошибка при создании товара', { description: err.message });
+            toast.error('Ошибка соединения', {
+                description: 'Проверьте интернет-соединение'
+            });
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 px-4 md:px-6 py-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <BasicProductFields register={register} errors={errors} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <CategorySelector
                     categories={categories}
                     register={register}
@@ -120,14 +135,18 @@ export default function ProductForm() {
             <SpecsSelector specs={specs} onUpdate={updateSpecs} />
 
             <div>
-                <label className="block text-sm mb-2 font-medium">Описание товара</label>
+                <label className="block text-sm mb-2 font-medium text-zinc-300">Описание товара</label>
                 <textarea
                     {...register('description')}
                     rows={6}
-                    className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-5 py-4 text-base focus:outline-none focus:border-yellow-400 transition resize-y min-h-[140px]"
+                    className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-5 py-4
+                               text-white placeholder:text-zinc-500 focus:border-[#d25e2d]
+                               focus:ring-1 focus:ring-[#d25e2d]/30 transition resize-y min-h-[140px]"
                     placeholder="Подробное описание товара..."
                 />
-                {errors.description && <p className="text-red-500 text-sm mt-1.5">{errors.description.message}</p>}
+                {errors.description && (
+                    <p className="text-red-500 text-sm mt-1.5">{errors.description.message}</p>
+                )}
             </div>
 
             <ProductImageUpload
@@ -137,10 +156,13 @@ export default function ProductForm() {
                 onPreviewsChange={setPreviews}
             />
 
+            {/* Кнопка создания */}
             <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full mt-6 bg-yellow-400 hover:bg-yellow-500 disabled:bg-zinc-700 disabled:text-zinc-400 transition text-black font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 text-lg active:scale-[0.985]"
+                className="w-full mt-8 bg-[#d25e2d] hover:bg-[#c44a1c] disabled:bg-[#3a3a3d]
+                           disabled:text-zinc-400 text-black font-semibold py-4 rounded-3xl
+                           flex items-center justify-center gap-3 text-lg transition-all active:scale-[0.98]"
             >
                 <Save className="w-5 h-5" />
                 {isLoading ? 'Создаём товар...' : 'Создать товар'}

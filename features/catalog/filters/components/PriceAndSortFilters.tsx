@@ -27,7 +27,8 @@ export default function PriceAndSortFilters({
     const minPrice = priceRange[0];
     const maxPrice = priceRange[1];
 
-    const displayPrice = minPrice === 0 && maxPrice === 20000
+    // Если оба значения по умолчанию — показываем "По цене"
+    const displayPrice = minPrice === 0 && maxPrice === 9999999
         ? "По цене"
         : `${minPrice.toLocaleString('ru')} — ${maxPrice.toLocaleString('ru')} ₽`;
 
@@ -38,7 +39,6 @@ export default function PriceAndSortFilters({
         new: "Новинки",
     };
 
-    // Закрытие при клике вне
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
@@ -62,16 +62,14 @@ export default function PriceAndSortFilters({
                         setIsSortOpen(!isSortOpen);
                         setIsPriceOpen(false);
                     }}
-                    className="flex items-center gap-2 bg-[#252527] hover:bg-[#3a3a3d] border border-[#3a3a3d]
-                               px-5 py-3 rounded-2xl transition text-sm whitespace-nowrap text-white"
+                    className="flex items-center gap-2 bg-[#252527] hover:bg-[#3a3a3d] border border-[#3a3a3d] px-5 py-3 rounded-2xl transition text-sm whitespace-nowrap text-white"
                 >
                     <ArrowUpDown className="w-5 h-5 text-[#d25e2d]" />
                     <span>{sortLabels[sortBy]}</span>
                 </button>
 
                 {isSortOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-[#252527] border border-[#3a3a3d]
-                                    rounded-2xl p-2 z-50 shadow-xl">
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-[#252527] border border-[#3a3a3d] rounded-2xl p-2 z-50 shadow-xl">
                         {Object.entries(sortLabels).map(([value, label]) => (
                             <button
                                 key={value}
@@ -79,10 +77,8 @@ export default function PriceAndSortFilters({
                                     setSortBy(value as SortOption);
                                     setIsSortOpen(false);
                                 }}
-                                className={`w-full text-left px-5 py-3 rounded-xl hover:bg-[#3a3a3d] transition-all
-                                    ${sortBy === value
-                                    ? 'text-[#d25e2d] font-medium'
-                                    : 'text-white'
+                                className={`w-full text-left px-5 py-3 rounded-xl hover:bg-[#3a3a3d] transition-all ${
+                                    sortBy === value ? 'text-[#d25e2d] font-medium' : 'text-white'
                                 }`}
                             >
                                 {label}
@@ -92,23 +88,21 @@ export default function PriceAndSortFilters({
                 )}
             </div>
 
-            {/* Цена */}
+            {/* Фильтр цены */}
             <div className="relative" ref={priceRef}>
                 <button
                     onClick={() => {
                         setIsPriceOpen(!isPriceOpen);
                         setIsSortOpen(false);
                     }}
-                    className="flex items-center gap-2 bg-[#252527] hover:bg-[#3a3a3d] border border-[#3a3a3d]
-                               px-5 py-3 rounded-2xl transition text-sm whitespace-nowrap text-white"
+                    className="flex items-center gap-2 bg-[#252527] hover:bg-[#3a3a3d] border border-[#3a3a3d] px-5 py-3 rounded-2xl transition text-sm whitespace-nowrap text-white"
                 >
                     <RussianRuble className="w-5 h-5 text-[#d25e2d]" />
                     <span className="truncate max-w-[170px]">{displayPrice}</span>
                 </button>
 
                 {isPriceOpen && (
-                    <div className="absolute top-full right-0 mt-2 w-72 bg-[#252527] border border-[#3a3a3d]
-                                    rounded-2xl p-5 z-50 shadow-xl">
+                    <div className="absolute top-full right-0 mt-2 w-72 bg-[#252527] border border-[#3a3a3d] rounded-2xl p-5 z-50 shadow-xl">
                         <div className="flex gap-3">
                             <div className="flex-1">
                                 <p className="text-xs text-zinc-400 mb-1">От</p>
@@ -116,8 +110,7 @@ export default function PriceAndSortFilters({
                                     type="text"
                                     value={minPrice === 0 ? '' : minPrice}
                                     onChange={(e) => setPriceRange([e.target.value === '' ? 0 : +e.target.value, maxPrice])}
-                                    className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-4 py-3
-                                               text-white focus:border-[#d25e2d] focus:ring-1 focus:ring-[#d25e2d]/30 outline-none"
+                                    className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-4 py-3 text-white focus:border-[#d25e2d] focus:ring-1 focus:ring-[#d25e2d]/30 outline-none"
                                     placeholder="0"
                                 />
                             </div>
@@ -125,19 +118,17 @@ export default function PriceAndSortFilters({
                                 <p className="text-xs text-zinc-400 mb-1">До</p>
                                 <input
                                     type="text"
-                                    value={maxPrice === 20000 ? '' : maxPrice}
-                                    onChange={(e) => setPriceRange([minPrice, e.target.value === '' ? 20000 : +e.target.value])}
-                                    className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-4 py-3
-                                               text-white focus:border-[#d25e2d] focus:ring-1 focus:ring-[#d25e2d]/30 outline-none"
-                                    placeholder="20000"
+                                    value={maxPrice === 9999999 ? '' : maxPrice}
+                                    onChange={(e) => setPriceRange([minPrice, e.target.value === '' ? 9999999 : +e.target.value])}
+                                    className="w-full bg-[#1c1c1e] border border-[#3a3a3d] rounded-2xl px-4 py-3 text-white focus:border-[#d25e2d] focus:ring-1 focus:ring-[#d25e2d]/30 outline-none"
+                                    placeholder="999999"
                                 />
                             </div>
                         </div>
 
                         <button
                             onClick={() => setIsPriceOpen(false)}
-                            className="mt-5 w-full py-3.5 bg-[#d25e2d] hover:bg-[#c44a1c]
-                                       text-black font-semibold rounded-2xl transition-all active:scale-[0.98]"
+                            className="mt-5 w-full py-3.5 bg-[#d25e2d] hover:bg-[#c44a1c] text-black font-semibold rounded-2xl transition-all active:scale-[0.98]"
                         >
                             Применить
                         </button>

@@ -8,6 +8,7 @@ import Logo from "@/components/ui/Logo";
 import Navbar from "@/components/Navbar";
 import CartModal from "@/features/cart/CartModal";
 import HeroSlider from "@/features/home/slider/HeroSlider";
+import Footer from "@/components/footer/Footer";
 
 export default function Home() {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
